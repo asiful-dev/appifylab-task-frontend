@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import "@/assets/fonts/flaticon/flaticon.css";
 import { AppProviders } from "@/shared/providers/app-providers";
 
 export const metadata: Metadata = {
