@@ -1,7 +1,7 @@
+import { redirect } from "next/navigation";
+
+import { APP_ROUTES } from "@/shared/libs/constants";
+
 export default function Home() {
-  return (
-    <h1 className="flex flex-col items-center justify-center h-screen text-4xl font-bold">
-      BuddyScript
-    </h1>
-  );
+  redirect(APP_ROUTES.login);
 }
