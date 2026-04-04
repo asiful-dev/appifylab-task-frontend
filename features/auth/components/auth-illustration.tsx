@@ -15,7 +15,7 @@ export function AuthIllustration() {
           alt="Registration illustration"
           width={760}
           height={580}
-          className="h-auto w-full max-w-[760px] object-contain dark:hidden"
+          className="h-auto w-full max-w-90 object-contain sm:max-w-115 lg:max-w-190 dark:hidden"
           priority
         />
         <Image
@@ -23,7 +23,7 @@ export function AuthIllustration() {
           alt="Registration illustration"
           width={760}
           height={580}
-          className="hidden h-auto w-full max-w-[760px] object-contain dark:block"
+          className="hidden h-auto w-full max-w-90 object-contain sm:max-w-115 lg:max-w-190 dark:block"
           priority
         />
       </>
@@ -36,7 +36,7 @@ export function AuthIllustration() {
       alt="Login illustration"
       width={760}
       height={580}
-      className="h-auto w-full max-w-[760px] object-contain"
+      className="h-auto w-full max-w-90 object-contain sm:max-w-115 lg:max-w-190"
       priority
     />
   );

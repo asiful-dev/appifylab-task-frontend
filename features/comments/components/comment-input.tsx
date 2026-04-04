@@ -47,6 +47,7 @@ export function CommentInput({
           className="min-h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus-visible:border-ring"
           placeholder={placeholder ?? "Write a comment..."}
           value={content}
+          disabled={isLoading}
           onChange={(event) => setContent(event.target.value)}
           maxLength={800}
         />

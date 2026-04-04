@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 import {
   getAuthRedirectPath,
@@ -40,7 +41,18 @@ export function AuthRouteGuard({
   }, [isAuthenticated, isReady, mode, pathname, router]);
 
   if (!isReady) {
-    return <div className="min-h-screen bg-background" />;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div
+          className="flex items-center gap-2 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+          Checking session...
+        </div>
+      </div>
+    );
   }
 
   const isBlocked =
@@ -48,7 +60,18 @@ export function AuthRouteGuard({
     (mode === "protected" && !isAuthenticated);
 
   if (isBlocked) {
-    return <div className="min-h-screen bg-background" />;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div
+          className="flex items-center gap-2 text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+          Redirecting...
+        </div>
+      </div>
+    );
   }
 
   return <>{children}</>;

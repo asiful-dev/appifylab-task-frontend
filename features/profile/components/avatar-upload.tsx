@@ -99,11 +99,17 @@ export function AvatarUpload({ user }: { user: User }) {
         type="file"
         accept="image/*"
         className="hidden"
+        disabled={uploadAvatarMutation.isPending}
         onChange={handleFileChange}
       />
 
       <div className="flex flex-wrap gap-2">
-        <Button type="button" variant="outline" onClick={handlePickFile}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handlePickFile}
+          disabled={uploadAvatarMutation.isPending}
+        >
           Choose Image
         </Button>
         <Button

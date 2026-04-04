@@ -63,7 +63,12 @@ export function ForgotPasswordForm() {
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <Label htmlFor="forgotEmail">Email</Label>
-          <Input id="forgotEmail" type="email" {...register("email")} />
+          <Input
+            id="forgotEmail"
+            type="email"
+            disabled={forgotPasswordMutation.isPending}
+            {...register("email")}
+          />
           {errors.email?.message ? (
             <p className="text-sm text-destructive">{errors.email.message}</p>
           ) : null}

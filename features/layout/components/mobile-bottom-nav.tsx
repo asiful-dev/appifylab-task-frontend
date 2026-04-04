@@ -18,7 +18,11 @@ export function MobileBottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed right-0 bottom-0 left-0 z-50 border-t border-border bg-card lg:hidden">
+    <nav
+      role="navigation"
+      aria-label="Mobile navigation"
+      className="fixed right-0 bottom-0 left-0 z-50 border-t border-border bg-card lg:hidden"
+    >
       <ul className="grid grid-cols-5">
         {navItems.map((item) => {
           const Icon = item.icon;

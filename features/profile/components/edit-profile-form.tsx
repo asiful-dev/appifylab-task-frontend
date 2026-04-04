@@ -61,7 +61,11 @@ export function EditProfileForm({ user }: { user: User }) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="firstName">First Name</Label>
-          <Input id="firstName" {...register("firstName")} />
+          <Input
+            id="firstName"
+            disabled={updateProfileMutation.isPending}
+            {...register("firstName")}
+          />
           {errors.firstName?.message ? (
             <p className="text-sm text-destructive">
               {errors.firstName.message}
@@ -71,7 +75,11 @@ export function EditProfileForm({ user }: { user: User }) {
 
         <div className="space-y-2">
           <Label htmlFor="lastName">Last Name</Label>
-          <Input id="lastName" {...register("lastName")} />
+          <Input
+            id="lastName"
+            disabled={updateProfileMutation.isPending}
+            {...register("lastName")}
+          />
           {errors.lastName?.message ? (
             <p className="text-sm text-destructive">
               {errors.lastName.message}
@@ -86,6 +94,7 @@ export function EditProfileForm({ user }: { user: User }) {
           id="bio"
           rows={4}
           maxLength={500}
+          disabled={updateProfileMutation.isPending}
           {...register("bio")}
           className="w-full resize-y rounded-md border border-input bg-background p-3 text-sm outline-none focus-visible:border-ring"
         />

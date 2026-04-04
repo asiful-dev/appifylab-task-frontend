@@ -9,20 +9,23 @@ export function PostImageUpload({
   preview,
   onSelect,
   onClear,
+  disabled,
 }: {
   preview: string | null;
   onSelect: (file: File) => void;
   onClear: () => void;
+  disabled?: boolean;
 }) {
   return (
     <div className="space-y-2">
-      <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-primary">
+      <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-primary disabled:cursor-not-allowed disabled:opacity-70">
         <ImagePlus className="size-4" />
         Add Photo
         <input
           type="file"
           accept="image/*"
           className="hidden"
+          disabled={disabled}
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (file) {
@@ -47,6 +50,8 @@ export function PostImageUpload({
             variant="destructive"
             className="absolute top-2 right-2"
             onClick={onClear}
+            disabled={disabled}
+            aria-label="Remove selected image"
           >
             <X className="size-3" />
           </Button>

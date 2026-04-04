@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -21,6 +23,7 @@ import {
 
 export function LoginForm() {
   const loginMutation = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -49,7 +52,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-lg bg-card p-8 shadow-[var(--b-shadow1)]">
+    <div className="w-full max-w-md rounded-lg bg-card p-8 shadow-(--b-shadow1)">
       <div className="mb-6 flex justify-center">
         <Image
           src="/images/logo.svg"
@@ -60,7 +63,7 @@ export function LoginForm() {
         />
       </div>
 
-      <h1 className="mb-2 text-center text-2xl font-medium text-[var(--color2)]">
+      <h1 className="mb-2 text-center text-2xl font-medium text-(--color2)">
         Log in
       </h1>
       <p className="mb-6 text-center text-sm text-muted-foreground">
@@ -70,7 +73,12 @@ export function LoginForm() {
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" {...register("email")} />
+          <Input
+            id="email"
+            type="email"
+            disabled={loginMutation.isPending}
+            {...register("email")}
+          />
           {errors.email?.message ? (
             <p className="text-sm text-destructive">{errors.email.message}</p>
           ) : null}
@@ -78,7 +86,30 @@ export function LoginForm() {
 
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" {...register("password")} />
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              disabled={loginMutation.isPending}
+              className="pr-10"
+              {...register("password")}
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="absolute top-1/2 right-1 -translate-y-1/2"
+              onClick={() => setShowPassword((previous) => !previous)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              disabled={loginMutation.isPending}
+            >
+              {showPassword ? (
+                <EyeOff className="size-4" aria-hidden="true" />
+              ) : (
+                <Eye className="size-4" aria-hidden="true" />
+              )}
+            </Button>
+          </div>
           {errors.password?.message ? (
             <p className="text-sm text-destructive">
               {errors.password.message}
@@ -112,10 +143,10 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <div className="my-4 flex items-center gap-3 text-sm text-[var(--color3)]">
-        <span className="h-px flex-1 bg-[var(--bg4)]" />
+      <div className="my-4 flex items-center gap-3 text-sm text-(--color3)">
+        <span className="h-px flex-1 bg-(--bg4)" />
         <span>Or</span>
-        <span className="h-px flex-1 bg-[var(--bg4)]" />
+        <span className="h-px flex-1 bg-(--bg4)" />
       </div>
 
       <GoogleAuthButton />

@@ -7,7 +7,10 @@ import { useComments } from "@/features/comments/hooks/use-comments";
 import { useCreateComment } from "@/features/comments/hooks/use-create-comment";
 import { useDeleteComment } from "@/features/comments/hooks/use-delete-comment";
 import { useAuthStore } from "@/shared/libs/auth-store";
+import { ErrorState } from "@/shared/ui-components/composed/error-state";
+import { SkeletonComment } from "@/shared/ui-components/composed/skeleton-comment";
 
+import { CommentsEmpty } from "./comments-empty";
 import { CommentInput } from "./comment-input";
 import { CommentList } from "./comment-list";
 
@@ -52,13 +55,24 @@ export function CommentSection({ postId }: { postId: string }) {
       />
 
       {commentsQuery.isLoading ? (
-        <p className="text-xs text-muted-foreground">Loading comments...</p>
+        <div className="space-y-3">
+          <SkeletonComment />
+          <SkeletonComment />
+        </div>
       ) : null}
 
-      {!commentsQuery.isLoading && !comments.length ? (
-        <p className="text-xs text-muted-foreground">
-          Be the first to comment.
-        </p>
+      {commentsQuery.isError ? (
+        <ErrorState
+          title="Failed to load comments"
+          description="Please try again."
+          onRetry={() => void commentsQuery.refetch()}
+        />
+      ) : null}
+
+      {!commentsQuery.isLoading &&
+      !commentsQuery.isError &&
+      !comments.length ? (
+        <CommentsEmpty />
       ) : null}
     </section>
   );

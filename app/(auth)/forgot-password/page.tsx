@@ -5,6 +5,10 @@ import { ForgotPasswordForm } from "@/features/auth/components/forgot-password-f
 export const metadata: Metadata = {
   title: "Forgot Password",
   description: "Reset your BuddyScript password",
+  openGraph: {
+    title: "Forgot Password | BuddyScript",
+    description: "Reset your BuddyScript password",
+  },
 };
 
 export default function ForgotPasswordPage() {

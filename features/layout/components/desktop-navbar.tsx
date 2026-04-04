@@ -25,7 +25,7 @@ export function DesktopNavbar() {
           <SearchBar />
         </div>
 
-        <nav>
+        <nav role="navigation" aria-label="Primary">
           <ul className="flex items-center gap-2">
             {mainNavItems.map((item) => (
               <li key={item.key}>

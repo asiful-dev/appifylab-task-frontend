@@ -63,12 +63,14 @@ export function PostComposer() {
             value={content}
             onChange={(event) => setContent(event.target.value)}
             placeholder="What's on your mind?"
+            disabled={createPostMutation.isPending}
             className="min-h-24 w-full resize-y rounded-md border border-input bg-background p-3 text-sm outline-none focus-visible:border-ring"
           />
         </div>
 
         <PostImageUpload
           preview={imagePreview}
+          disabled={createPostMutation.isPending}
           onSelect={(file) => {
             setImageFile(file);
             setImagePreview(URL.createObjectURL(file));
@@ -80,7 +82,11 @@ export function PostComposer() {
         />
 
         <div className="flex items-center justify-between gap-3">
-          <VisibilitySelector value={visibility} onChange={setVisibility} />
+          <VisibilitySelector
+            value={visibility}
+            onChange={setVisibility}
+            disabled={createPostMutation.isPending}
+          />
           <Button
             type="button"
             className="h-10"

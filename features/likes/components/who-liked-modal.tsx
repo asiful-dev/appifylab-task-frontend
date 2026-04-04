@@ -61,6 +61,7 @@ export function WhoLikedModal({
             variant="ghost"
             size="icon-sm"
             onClick={onClose}
+            aria-label="Close who liked modal"
           >
             ✕
           </Button>
@@ -87,7 +88,9 @@ export function WhoLikedModal({
               </div>
             ))
           ) : (
-            <p className="text-sm text-muted-foreground">No likes yet.</p>
+            <p className="text-sm text-muted-foreground">
+              No one has liked this yet.
+            </p>
           )}
         </div>
 

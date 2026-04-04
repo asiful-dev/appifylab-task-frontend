@@ -17,14 +17,16 @@ const options: Array<{ label: string; value: PostVisibility }> = [
 export function VisibilitySelector({
   value,
   onChange,
+  disabled,
 }: {
   value: PostVisibility;
   onChange: (value: PostVisibility) => void;
+  disabled?: boolean;
 }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button type="button" variant="outline" size="sm">
+        <Button type="button" variant="outline" size="sm" disabled={disabled}>
           {value === "public" ? "Public" : "Private"}
         </Button>
       </DropdownMenuTrigger>

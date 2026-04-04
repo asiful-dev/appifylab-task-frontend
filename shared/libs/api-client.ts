@@ -115,6 +115,25 @@ async function parseBody<T>(response: Response): Promise<T> {
     return payload as T;
   }
 
+  if (response.status === 429) {
+    const retryAfter = response.headers.get("retry-after");
+    const message = retryAfter
+      ? `Too many requests. Please try again in ${retryAfter} seconds.`
+      : "Too many requests. Please try again later.";
+
+    if (typeof window !== "undefined") {
+      void import("sonner")
+        .then(({ toast }) => {
+          toast.error(message);
+        })
+        .catch(() => {
+          // noop
+        });
+    }
+
+    throw new ApiError("RATE_LIMITED", message, 429);
+  }
+
   if (payload && typeof payload === "object" && "error" in payload) {
     const error = (payload as ApiErrorResponse).error;
     throw new ApiError(

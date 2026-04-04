@@ -23,7 +23,12 @@ export function ProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button type="button" variant="ghost" className="h-10 gap-2 px-2">
+        <Button
+          type="button"
+          variant="ghost"
+          className="h-10 gap-2 px-2"
+          aria-label="Open profile menu"
+        >
           <UserAvatar
             size="sm"
             src={user?.profileImageUrl}

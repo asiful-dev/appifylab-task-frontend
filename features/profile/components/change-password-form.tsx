@@ -49,6 +49,7 @@ export function ChangePasswordForm() {
         <Input
           id="currentPassword"
           type="password"
+          disabled={changePasswordMutation.isPending}
           {...register("currentPassword")}
         />
         {errors.currentPassword?.message ? (
@@ -60,7 +61,12 @@ export function ChangePasswordForm() {
 
       <div className="space-y-2">
         <Label htmlFor="newPassword">New Password</Label>
-        <Input id="newPassword" type="password" {...register("newPassword")} />
+        <Input
+          id="newPassword"
+          type="password"
+          disabled={changePasswordMutation.isPending}
+          {...register("newPassword")}
+        />
         {errors.newPassword?.message ? (
           <p className="text-sm text-destructive">
             {errors.newPassword.message}
@@ -73,6 +79,7 @@ export function ChangePasswordForm() {
         <Input
           id="confirmPassword"
           type="password"
+          disabled={changePasswordMutation.isPending}
           {...register("confirmPassword")}
         />
         {errors.confirmPassword?.message ? (
