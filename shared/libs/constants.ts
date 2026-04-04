@@ -26,6 +26,7 @@ export const API_ROUTES = {
     resetPassword: "/auth/reset-password",
   },
   users: {
+    base: "/users",
     me: "/users/me",
     avatar: "/users/me/avatar",
   },

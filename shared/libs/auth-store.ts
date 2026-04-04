@@ -14,6 +14,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   setSession: (user: AuthUser, accessToken: string) => void;
+  setUser: (user: AuthUser) => void;
   clearSession: () => void;
   setAccessToken: (accessToken: string | null) => void;
   setLoading: (isLoading: boolean) => void;
@@ -26,6 +27,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: true,
   setSession: (user, accessToken) =>
     set({ user, accessToken, isAuthenticated: true, isLoading: false }),
+  setUser: (user) =>
+    set((state) => ({
+      user,
+      isAuthenticated: state.isAuthenticated || Boolean(state.accessToken),
+      isLoading: false,
+    })),
   clearSession: () =>
     set({
       user: null,
