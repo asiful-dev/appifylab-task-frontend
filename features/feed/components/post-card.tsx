@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { CommentSection } from "@/features/comments/components/comment-section";
@@ -34,12 +34,17 @@ export function PostCard({
   const deleteMutation = useDeletePost();
   const toggleLikeMutation = useToggleLike("post");
   const [showWhoLiked, setShowWhoLiked] = useState(false);
+  const [mediaSrc, setMediaSrc] = useState(post.imageUrl ?? null);
   const authorProfileHref =
     currentUserId && post.authorId === currentUserId
       ? "/profile"
       : `/profile/${post.authorId}`;
 
   const canManage = currentUserId === post.authorId;
+
+  useEffect(() => {
+    setMediaSrc(post.imageUrl ?? null);
+  }, [post.imageUrl]);
 
   return (
     <Card className="mb-4">
@@ -106,13 +111,18 @@ export function PostCard({
           <p className="text-sm text-foreground">{post.content}</p>
         ) : null}
 
-        {post.imageUrl ? (
+        {mediaSrc ? (
           <Image
-            src={post.imageUrl}
+            src={mediaSrc}
             alt="Post media"
             width={720}
             height={420}
             className="h-auto w-full rounded-md object-cover"
+            onError={() => {
+              if (mediaSrc !== "/images/post_img.png") {
+                setMediaSrc("/images/post_img.png");
+              }
+            }}
           />
         ) : null}
 

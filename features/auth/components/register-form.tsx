@@ -132,11 +132,9 @@ export function RegisterForm() {
               className="pr-10"
               {...register("password")}
             />
-            <Button
+            <button
               type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="absolute top-1/2 right-1 -translate-y-1/2"
+              className="absolute right-1 top-1/2 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
               onClick={() => setShowPassword((previous) => !previous)}
               aria-label={showPassword ? "Hide password" : "Show password"}
               disabled={registerMutation.isPending}
@@ -146,7 +144,7 @@ export function RegisterForm() {
               ) : (
                 <Eye className="size-4" aria-hidden="true" />
               )}
-            </Button>
+            </button>
           </div>
           {errors.password?.message ? (
             <p className="text-sm text-destructive">
@@ -165,11 +163,9 @@ export function RegisterForm() {
               className="pr-10"
               {...register("confirmPassword")}
             />
-            <Button
+            <button
               type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="absolute top-1/2 right-1 -translate-y-1/2"
+              className="absolute right-1 top-1/2 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
               onClick={() => setShowConfirmPassword((previous) => !previous)}
               aria-label={
                 showConfirmPassword
@@ -183,7 +179,7 @@ export function RegisterForm() {
               ) : (
                 <Eye className="size-4" aria-hidden="true" />
               )}
-            </Button>
+            </button>
           </div>
           {errors.confirmPassword?.message ? (
             <p className="text-sm text-destructive">
