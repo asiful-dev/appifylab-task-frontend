@@ -15,5 +15,23 @@ export function getCookie(name: string): string | null {
 }
 
 export function getCsrfToken(): string | null {
-  return getCookie("csrfToken");
+  const tokenFromCookie =
+    getCookie("csrfToken") ||
+    getCookie("XSRF-TOKEN") ||
+    getCookie("_csrf") ||
+    getCookie("csrf-token");
+
+  if (tokenFromCookie) {
+    return tokenFromCookie;
+  }
+
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const tokenFromMeta = document
+    .querySelector('meta[name="csrf-token"]')
+    ?.getAttribute("content");
+
+  return tokenFromMeta || null;
 }
