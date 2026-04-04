@@ -1,5 +1,6 @@
 import { TrendingTopics } from "@/features/layout/components/trending-topics";
 import { YouMightLike } from "@/features/layout/components/you-might-like";
+import { YourFriends } from "@/features/layout/components/your-friends";
 
 export function RightSidebar() {
   return (
@@ -9,7 +10,8 @@ export function RightSidebar() {
       className="hidden space-y-4 md:block"
     >
       <YouMightLike />
-      <TrendingTopics />
+      <YourFriends />
+      {/* <TrendingTopics /> */}
     </aside>
   );
 }

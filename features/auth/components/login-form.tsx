@@ -52,7 +52,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-lg bg-card p-8 shadow-(--b-shadow1)">
+    <div className="w-full max-w-md rounded-lg bg-card p-8">
       <div className="mb-6 flex justify-center">
         <Image
           src="/images/logo.svg"
@@ -119,7 +119,10 @@ export function LoginForm() {
 
         <div className="flex items-center justify-between text-sm">
           <label className="inline-flex items-center gap-2">
-            <Checkbox {...register("rememberMe")} />
+            <Checkbox
+              {...register("rememberMe")}
+              className="ring rounded-full"
+            />
             <span>Remember me</span>
           </label>
           <Link

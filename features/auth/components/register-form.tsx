@@ -61,7 +61,7 @@ export function RegisterForm() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-lg bg-card p-8 shadow-(--b-shadow1)">
+    <div className="w-full max-w-md rounded-lg bg-card p-8 ">
       <div className="mb-6 flex justify-center">
         <Image
           src="/images/logo.svg"
@@ -210,6 +210,7 @@ export function RegisterForm() {
                 }}
                 onBlur={field.onBlur}
                 name={field.name}
+                className="ring rounded-full"
               />
             )}
           />
