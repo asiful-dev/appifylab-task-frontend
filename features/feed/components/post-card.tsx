@@ -1,13 +1,21 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
 
+import { CommentSection } from "@/features/comments/components/comment-section";
 import type { Post } from "@/features/feed/utils/post.types";
 import { useDeletePost } from "@/features/feed/hooks/use-delete-post";
 import { useUpdatePost } from "@/features/feed/hooks/use-update-post";
+import { LikeButton } from "@/features/likes/components/like-button";
+import { ReactionSummary } from "@/features/likes/components/reaction-summary";
+import { WhoLikedModal } from "@/features/likes/components/who-liked-modal";
+import { useToggleLike } from "@/features/likes/hooks/use-toggle-like";
 import { RelativeTime } from "@/shared/ui-components/composed/relative-time";
 import { UserAvatar } from "@/shared/ui-components/composed/user-avatar";
+import { Button } from "@/shared/ui-components/controls/button";
 import {
   Card,
   CardContent,
@@ -24,6 +32,12 @@ export function PostCard({
 }) {
   const updateMutation = useUpdatePost();
   const deleteMutation = useDeletePost();
+  const toggleLikeMutation = useToggleLike("post");
+  const [showWhoLiked, setShowWhoLiked] = useState(false);
+  const authorProfileHref =
+    currentUserId && post.authorId === currentUserId
+      ? "/profile"
+      : `/profile/${post.authorId}`;
 
   const canManage = currentUserId === post.authorId;
 
@@ -31,15 +45,20 @@ export function PostCard({
     <Card className="mb-4">
       <CardHeader className="flex flex-row items-start justify-between gap-3">
         <div className="flex items-start gap-2">
-          <UserAvatar
-            src={post.author.profileImageUrl}
-            firstName={post.author.firstName}
-            lastName={post.author.lastName}
-          />
+          <Link href={authorProfileHref}>
+            <UserAvatar
+              src={post.author.profileImageUrl}
+              firstName={post.author.firstName}
+              lastName={post.author.lastName}
+            />
+          </Link>
           <div>
-            <p className="text-sm font-medium text-foreground">
+            <Link
+              href={authorProfileHref}
+              className="text-sm font-medium text-foreground hover:underline"
+            >
               {post.author.firstName} {post.author.lastName}
-            </p>
+            </Link>
             <p className="text-xs text-muted-foreground">
               <RelativeTime value={post.createdAt} /> · {post.visibility}
             </p>
@@ -98,10 +117,55 @@ export function PostCard({
         ) : null}
 
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <p>{post.likeCount} reactions</p>
+          <ReactionSummary
+            totalCount={post.likeCount}
+            onClick={() => setShowWhoLiked(true)}
+          />
           <p>{post.commentCount} comments</p>
         </div>
       </CardContent>
+
+      <div className="flex items-center gap-2 px-4 py-2">
+        <LikeButton
+          isLiked={post.isLiked}
+          count={post.likeCount}
+          isLoading={toggleLikeMutation.isPending}
+          onToggle={() => toggleLikeMutation.mutate({ targetId: post.id })}
+        />
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            const element = document.getElementById(`comments-${post.id}`);
+            element?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        >
+          Comment
+        </Button>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          disabled
+          title="Share is coming soon"
+        >
+          Share
+        </Button>
+      </div>
+
+      <div id={`comments-${post.id}`}>
+        <CommentSection postId={post.id} />
+      </div>
+
+      <WhoLikedModal
+        open={showWhoLiked}
+        onClose={() => setShowWhoLiked(false)}
+        targetType="post"
+        targetId={post.id}
+      />
     </Card>
   );
 }
