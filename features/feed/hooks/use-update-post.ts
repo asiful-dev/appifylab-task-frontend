@@ -9,8 +9,13 @@ export function useUpdatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, payload }: { id: string; payload: UpdatePostInput }) =>
-      postApi.updatePost(id, payload),
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: UpdatePostInput | FormData;
+    }) => postApi.updatePost(id, payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["feed"] });
     },

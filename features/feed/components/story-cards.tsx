@@ -52,6 +52,7 @@ export function StoryCards() {
                       src={story.bg}
                       alt={story.name}
                       fill
+                      sizes="140px"
                       className="object-cover"
                     />
                     <div className="absolute inset-x-0 -bottom-3 flex justify-center">
@@ -72,6 +73,7 @@ export function StoryCards() {
                     src={story.bg}
                     alt={story.name}
                     fill
+                    sizes="140px"
                     className="object-cover"
                   />
                   <div className="absolute right-2 top-2 z-10">

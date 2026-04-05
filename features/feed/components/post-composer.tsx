@@ -15,8 +15,16 @@ import {
 
 import { useCreatePost } from "@/features/feed/hooks/use-create-post";
 import { useAuthStore } from "@/shared/libs/auth-store";
+import { UserAvatar } from "@/shared/ui-components/composed/user-avatar";
 import { Button } from "@/shared/ui-components/controls/button";
 import { Card } from "@/shared/ui-components/controls/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/ui-components/controls/select";
 
 const actionButtons = [
   { icon: ImageIcon, label: "Photo", action: "photo" as const },
@@ -32,6 +40,7 @@ export function PostComposer() {
   const [content, setContent] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
 
   async function handleSubmit() {
     if (!content.trim() && !imageFile) {
@@ -49,13 +58,14 @@ export function PostComposer() {
       formData.append("image", imageFile);
     }
 
-    formData.append("visibility", "public");
+    formData.append("visibility", visibility);
 
     try {
       await createPostMutation.mutateAsync(formData);
       setContent("");
       setImageFile(null);
       setImagePreview(null);
+      setVisibility("public");
       toast.success("Post created");
     } catch {
       toast.error("Unable to create post");
@@ -79,19 +89,13 @@ export function PostComposer() {
   return (
     <Card className="mb-4 rounded-md border border-border bg-card p-5">
       <div className="mb-4 flex gap-3">
-        <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full">
-          {user?.profileImageUrl ? (
-            <Image
-              src={user.profileImageUrl}
-              alt={user.firstName || "User"}
-              width={40}
-              height={40}
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="h-full w-full bg-primary" />
-          )}
-        </div>
+        <UserAvatar
+          size="default"
+          src={user?.profileImageUrl}
+          firstName={user?.firstName}
+          lastName={user?.lastName}
+          className="shrink-0"
+        />
         <div className="relative flex-1">
           <textarea
             value={content}
@@ -130,48 +134,66 @@ export function PostComposer() {
           <Button
             type="button"
             size="icon-xs"
-            variant="destructive"
-            className="absolute right-2 top-2"
+            variant="outline"
+            className="absolute right-2 top-2 bg-background/90 text-foreground shadow-sm backdrop-blur-xs"
             onClick={handleClearImage}
             disabled={createPostMutation.isPending}
             aria-label="Remove selected image"
           >
-            <X className="size-3" />
+            <X className="size-3.5" />
           </Button>
         </div>
       ) : null}
 
-      <div className="flex items-center justify-between gap-3 rounded-md bg-primary/10 px-3 py-2">
-        <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+      <div className="flex items-center justify-between gap-2 rounded-md bg-primary/10 px-2 py-2">
+        <div className="flex min-w-0 items-center gap-0.5 sm:gap-1">
           {actionButtons.map((button) => (
             <Button
               key={button.label}
               type="button"
               variant="ghost"
-              size="sm"
+              size="xs"
               disabled={createPostMutation.isPending}
-              className="gap-2 px-2.5 text-base text-muted-foreground hover:text-primary hover:bg-transparent"
+              className="gap-1.5 px-1.5 text-sm text-muted-foreground hover:bg-transparent hover:text-primary"
               onClick={() => {
                 if (button.action === "photo") {
                   fileInputRef.current?.click();
                 }
               }}
             >
-              <button.icon className="size-4" />
+              <button.icon className="size-3.5" />
               {button.label}
             </Button>
           ))}
         </div>
-        <Button
-          type="button"
-          size="lg"
-          className="gap-2 bg-primary text-white hover:bg-primary/90"
-          disabled={createPostMutation.isPending}
-          onClick={handleSubmit}
-        >
-          <Send className="size-3" />
-          {createPostMutation.isPending ? "Posting..." : "Post"}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Select
+            value={visibility}
+            onValueChange={(value) =>
+              setVisibility(value as "public" | "private")
+            }
+            disabled={createPostMutation.isPending}
+          >
+            <SelectTrigger className="h-8 min-w-21 bg-card">
+              <SelectValue placeholder="Visibility" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="public">Public</SelectItem>
+              <SelectItem value="private">Private</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Button
+            type="button"
+            size="sm"
+            className="h-8 gap-1.5 bg-primary px-3 text-white hover:bg-primary/90"
+            disabled={createPostMutation.isPending}
+            onClick={handleSubmit}
+          >
+            <Send className="size-3" />
+            {createPostMutation.isPending ? "Posting..." : "Post"}
+          </Button>
+        </div>
       </div>
     </Card>
   );

@@ -54,6 +54,7 @@ export function EventsWidget() {
               alt={event.title}
               width={320}
               height={190}
+              loading="eager"
               className="h-auto w-full object-cover"
             />
 

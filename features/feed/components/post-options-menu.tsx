@@ -38,14 +38,7 @@ export function PostOptionsMenu({
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onEdit}>Edit Post</DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-destructive"
-              onClick={() => {
-                if (window.confirm("Delete this post?")) {
-                  onDelete();
-                }
-              }}
-            >
+            <DropdownMenuItem className="text-destructive" onClick={onDelete}>
               Delete Post
             </DropdownMenuItem>
           </>

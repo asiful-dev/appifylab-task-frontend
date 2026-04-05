@@ -59,6 +59,7 @@ export function LoginForm() {
           alt="BuddyScript"
           width={130}
           height={42}
+          style={{ height: "auto" }}
           priority
         />
       </div>

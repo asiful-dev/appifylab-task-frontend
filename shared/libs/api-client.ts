@@ -1,6 +1,5 @@
 import { API_BASE_URL, API_ROUTES } from "@/shared/libs/constants";
 import { useAuthStore } from "@/shared/libs/auth-store";
-import { getCsrfToken } from "@/shared/utils/csrf";
 
 export interface ApiSuccessResponse<T> {
   success: true;
@@ -41,9 +40,7 @@ interface RequestOptions extends Omit<RequestInit, "body" | "method"> {
   body?: unknown;
   method?: HttpMethod;
   query?: Record<string, QueryValue>;
-  csrf?: boolean;
   retryOnAuthFailure?: boolean;
-  retryOnCsrfFailure?: boolean;
 }
 
 function buildUrl(path: string, query?: Record<string, QueryValue>) {
@@ -69,12 +66,7 @@ function isFormData(value: unknown): value is FormData {
   return typeof FormData !== "undefined" && value instanceof FormData;
 }
 
-function buildHeaders(
-  initHeaders?: HeadersInit,
-  method: HttpMethod = "GET",
-  csrf = false,
-  csrfToken?: string | null,
-) {
+function buildHeaders(initHeaders?: HeadersInit, method: HttpMethod = "GET") {
   const headers = new Headers(initHeaders);
   const accessToken = useAuthStore.getState().accessToken;
 
@@ -84,33 +76,7 @@ function buildHeaders(
     headers.set("Authorization", `Bearer ${accessToken}`);
   }
 
-  if (csrf && ["POST", "PATCH", "PUT", "DELETE"].includes(method)) {
-    if (csrfToken) {
-      headers.set("x-csrf-token", csrfToken);
-      headers.set("csrf-token", csrfToken);
-      headers.set("x-xsrf-token", csrfToken);
-    }
-  }
-
   return headers;
-}
-
-async function bootstrapCsrfToken() {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  try {
-    await fetch(buildUrl(API_ROUTES.auth.refresh), {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-      },
-    });
-  } catch {
-    // Ignore; request flow will continue and surface original API error if still failing.
-  }
 }
 
 async function parseBody<T>(response: Response): Promise<T> {
@@ -213,27 +179,10 @@ async function request<T>(
     body,
     method = "GET",
     query,
-    csrf = true,
     retryOnAuthFailure = true,
-    retryOnCsrfFailure = true,
     ...init
   } = options;
-  const isStateChangingMethod = ["POST", "PATCH", "PUT", "DELETE"].includes(
-    method,
-  );
-  let csrfToken = csrf && isStateChangingMethod ? getCsrfToken() : null;
-
-  if (
-    csrf &&
-    isStateChangingMethod &&
-    !csrfToken &&
-    path !== API_ROUTES.auth.refresh
-  ) {
-    await bootstrapCsrfToken();
-    csrfToken = getCsrfToken();
-  }
-
-  const headers = buildHeaders(init.headers, method, csrf, csrfToken);
+  const headers = buildHeaders(init.headers, method);
   const hasBody = body !== undefined && body !== null;
 
   if (hasBody && !isFormData(body) && !headers.has("Content-Type")) {
@@ -262,30 +211,7 @@ async function request<T>(
     }
   }
 
-  try {
-    return await parseBody<T>(response);
-  } catch (error) {
-    const isCsrfError =
-      error instanceof ApiError &&
-      error.status === 403 &&
-      /csrf/i.test(error.message);
-
-    if (
-      isCsrfError &&
-      retryOnCsrfFailure &&
-      csrf &&
-      isStateChangingMethod &&
-      path !== API_ROUTES.auth.refresh
-    ) {
-      await bootstrapCsrfToken();
-      return request<T>(path, {
-        ...options,
-        retryOnCsrfFailure: false,
-      });
-    }
-
-    throw error;
-  }
+  return parseBody<T>(response);
 }
 
 export const apiClient = {

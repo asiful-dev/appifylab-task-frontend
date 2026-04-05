@@ -86,6 +86,7 @@ export function DesktopNavbar() {
             alt="BuddyScript"
             width={124}
             height={40}
+            style={{ height: "auto" }}
             priority
           />
         </Link>

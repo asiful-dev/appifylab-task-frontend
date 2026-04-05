@@ -68,6 +68,7 @@ export function RegisterForm() {
           alt="BuddyScript"
           width={130}
           height={42}
+          style={{ height: "auto" }}
           priority
         />
       </div>

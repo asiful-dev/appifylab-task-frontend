@@ -47,13 +47,13 @@ export function PostImageUpload({
           <Button
             type="button"
             size="icon-xs"
-            variant="destructive"
-            className="absolute top-2 right-2"
+            variant="outline"
+            className="absolute top-2 right-2 bg-background/90 text-foreground shadow-sm backdrop-blur-xs"
             onClick={onClear}
             disabled={disabled}
             aria-label="Remove selected image"
           >
-            <X className="size-3" />
+            <X className="size-3.5" />
           </Button>
         </div>
       ) : null}

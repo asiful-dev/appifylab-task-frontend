@@ -13,6 +13,14 @@ import { useToggleLike } from "@/features/likes/hooks/use-toggle-like";
 import { RelativeTime } from "@/shared/ui-components/composed/relative-time";
 import { UserAvatar } from "@/shared/ui-components/composed/user-avatar";
 import { Button } from "@/shared/ui-components/controls/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/ui-components/controls/dialog";
 
 import { CommentInput } from "./comment-input";
 import { ReplyList } from "./reply-list";
@@ -32,6 +40,7 @@ export function CommentItem({
   const [showReplies, setShowReplies] = useState(false);
   const [likesTargetId, setLikesTargetId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const toggleLikeMutation = useToggleLike("comment");
   const createReplyMutation = useCreateReply(comment.id, postId);
@@ -107,20 +116,7 @@ export function CommentItem({
               variant="ghost"
               size="sm"
               disabled={isDeleting}
-              onClick={async () => {
-                if (window.confirm("Delete this comment?")) {
-                  setIsDeleting(true);
-
-                  try {
-                    await onDelete(comment.id);
-                    toast.success("Comment deleted");
-                  } catch {
-                    toast.error("Unable to delete comment");
-                  } finally {
-                    setIsDeleting(false);
-                  }
-                }
-              }}
+              onClick={() => setIsDeleteDialogOpen(true)}
             >
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
@@ -170,6 +166,47 @@ export function CommentItem({
           targetType="comment"
           targetId={likesTargetId ?? ""}
         />
+
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete comment?</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsDeleteDialogOpen(false)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                disabled={isDeleting}
+                onClick={async () => {
+                  setIsDeleting(true);
+
+                  try {
+                    await onDelete(comment.id);
+                    setIsDeleteDialogOpen(false);
+                    toast.success("Comment deleted");
+                  } catch {
+                    toast.error("Unable to delete comment");
+                  } finally {
+                    setIsDeleting(false);
+                  }
+                }}
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </article>
   );

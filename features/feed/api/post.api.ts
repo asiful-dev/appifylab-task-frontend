@@ -20,8 +20,12 @@ export const postApi = {
     apiClient.upload<Post>(API_ROUTES.posts.base, payload),
   getPost: (id: string) =>
     apiClient.get<Post>(`${API_ROUTES.posts.base}/${id}`),
-  updatePost: (id: string, payload: UpdatePostInput) =>
-    apiClient.patch<Post>(`${API_ROUTES.posts.base}/${id}`, payload),
+  updatePost: (id: string, payload: UpdatePostInput | FormData) =>
+    payload instanceof FormData
+      ? apiClient.upload<Post>(`${API_ROUTES.posts.base}/${id}`, payload, {
+          method: "PATCH",
+        })
+      : apiClient.patch<Post>(`${API_ROUTES.posts.base}/${id}`, payload),
   deletePost: (id: string) =>
     apiClient.delete<{ message: string }>(`${API_ROUTES.posts.base}/${id}`),
 };

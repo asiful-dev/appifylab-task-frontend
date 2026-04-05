@@ -42,18 +42,19 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-lg bg-card p-8 shadow-[var(--b-shadow1)]">
+    <div className="w-full max-w-md rounded-lg bg-card p-8 shadow-(--b-shadow1)">
       <div className="mb-6 flex justify-center">
         <Image
           src="/images/logo.svg"
           alt="BuddyScript"
           width={130}
           height={42}
+          style={{ height: "auto" }}
           priority
         />
       </div>
 
-      <h1 className="mb-2 text-center text-2xl font-medium text-[var(--color2)]">
+      <h1 className="mb-2 text-center text-2xl font-medium text-(--color2)">
         Forgot Password
       </h1>
       <p className="mb-6 text-center text-sm text-muted-foreground">

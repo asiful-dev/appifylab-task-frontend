@@ -12,8 +12,7 @@ export function QueryProvider({ children }: { children: ReactNode }) {
         defaultOptions: {
           queries: {
             staleTime: 60_000,
-            retry: (failureCount, error, query) =>
-              shouldRetry(failureCount, error, query.queryKey),
+            retry: (failureCount, error) => shouldRetry(failureCount, error),
             retryDelay: defaultRetryDelay,
             refetchOnWindowFocus: false,
           },
