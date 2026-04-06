@@ -145,8 +145,8 @@ export function PostComposer() {
         </div>
       ) : null}
 
-      <div className="flex items-center justify-between gap-2 rounded-md bg-primary/10 px-2 py-2">
-        <div className="flex min-w-0 items-center gap-0.5 sm:gap-1">
+      <div className="flex flex-col gap-2 rounded-md bg-primary/10 px-2 py-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 flex-wrap items-center gap-1">
           {actionButtons.map((button) => (
             <Button
               key={button.label}
@@ -154,7 +154,7 @@ export function PostComposer() {
               variant="ghost"
               size="xs"
               disabled={createPostMutation.isPending}
-              className="gap-1.5 px-1.5 text-sm text-muted-foreground hover:bg-transparent hover:text-primary"
+              className="h-8 gap-1 px-1.5 text-xs text-muted-foreground hover:bg-transparent hover:text-primary sm:text-sm"
               onClick={() => {
                 if (button.action === "photo") {
                   fileInputRef.current?.click();
@@ -166,7 +166,7 @@ export function PostComposer() {
             </Button>
           ))}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex w-full items-center justify-end gap-2 sm:w-auto">
           <Select
             value={visibility}
             onValueChange={(value) =>
@@ -174,7 +174,7 @@ export function PostComposer() {
             }
             disabled={createPostMutation.isPending}
           >
-            <SelectTrigger className="h-8 min-w-21 bg-card">
+            <SelectTrigger className="h-8 w-24 min-w-0 bg-card sm:w-auto sm:min-w-21">
               <SelectValue placeholder="Visibility" />
             </SelectTrigger>
             <SelectContent>
