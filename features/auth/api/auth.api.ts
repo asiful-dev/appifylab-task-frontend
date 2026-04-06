@@ -28,7 +28,10 @@ export const authFeatureApi = {
     apiClient.post<T>(API_ROUTES.auth.register, payload),
   login: <T>(payload: LoginPayload) =>
     apiClient.post<T>(API_ROUTES.auth.login, payload),
-  refresh: <T>() => apiClient.post<T>(API_ROUTES.auth.refresh),
+  refresh: <T>() =>
+    apiClient.post<T>(API_ROUTES.auth.refresh, undefined, {
+      retryOnAuthFailure: false,
+    }),
   logout: <T>() => apiClient.post<T>(API_ROUTES.auth.logout),
   forgotPassword: <T>(payload: ForgotPasswordPayload) =>
     apiClient.post<T>(API_ROUTES.auth.forgotPassword, payload),
