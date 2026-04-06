@@ -16,7 +16,7 @@ export function ProfileHeader({
 }) {
   return (
     <Card className="overflow-hidden">
-      <div className="relative h-48 bg-gradient-to-r from-primary/90 to-blue-400">
+      <div className="relative h-48 bg-linear-to-r from-primary/90 to-blue-400">
         <Image
           src="/images/profile-cover-img.png"
           alt="Profile cover"

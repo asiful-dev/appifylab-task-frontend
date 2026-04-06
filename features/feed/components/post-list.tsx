@@ -3,39 +3,29 @@
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { useFeed } from "@/features/feed/hooks/use-feed";
+import type { Post } from "@/features/feed/utils/post.types";
 import { PostCard } from "@/features/feed/components/post-card";
 import { useAuthStore } from "@/shared/libs/auth-store";
 
-export function PostList() {
+export function PostList({
+  posts,
+  hasNextPage,
+  isFetchingNextPage,
+  onLoadMore,
+}: {
+  posts: Post[];
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  onLoadMore: () => void;
+}) {
   const { ref, inView } = useInView({ threshold: 0.1 });
   const currentUserId = useAuthStore((state) => state.user?.id);
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useFeed();
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-      void fetchNextPage();
+      onLoadMore();
     }
-  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
-
-  if (isLoading) {
-    return (
-      <p className="py-8 text-center text-sm text-muted-foreground">
-        Loading feed...
-      </p>
-    );
-  }
-
-  const posts = data?.pages.flatMap((page) => page.posts ?? []) ?? [];
-
-  if (!posts.length) {
-    return (
-      <p className="py-8 text-center text-sm text-muted-foreground">
-        No posts yet.
-      </p>
-    );
-  }
+  }, [hasNextPage, inView, isFetchingNextPage, onLoadMore]);
 
   return (
     <section>

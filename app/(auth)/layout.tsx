@@ -10,10 +10,10 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       <div className="relative min-h-screen overflow-hidden bg-background">
         <AuthShapes />
         <div className="relative z-10 grid min-h-screen grid-cols-1 lg:grid-cols-12">
-          <aside className="hidden items-center justify-center px-10 lg:col-span-8 lg:flex">
+          <aside className="flex items-center justify-center px-4 pt-6 lg:col-span-8 lg:px-10 lg:pt-0">
             <AuthIllustration />
           </aside>
-          <main className="col-span-1 flex items-center justify-center p-4 lg:col-span-4 lg:p-8">
+          <main className="col-span-1 flex items-center justify-center px-4 pb-6 lg:col-span-4 lg:p-8">
             {children}
           </main>
         </div>

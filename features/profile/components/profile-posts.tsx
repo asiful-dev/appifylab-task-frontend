@@ -6,6 +6,7 @@ import { useInView } from "react-intersection-observer";
 import { PostCard } from "@/features/feed/components/post-card";
 import { useUserPosts } from "@/features/profile/hooks/use-user-posts";
 import { useAuthStore } from "@/shared/libs/auth-store";
+import { EmptyState } from "@/shared/ui-components/composed/empty-state";
 import {
   Card,
   CardContent,
@@ -46,9 +47,14 @@ export function ProfilePosts({
         ) : null}
 
         {!isLoading && !posts.length ? (
-          <p className="py-6 text-center text-sm text-muted-foreground">
-            No posts yet.
-          </p>
+          <EmptyState
+            title={isOwnProfile ? "No posts yet" : "No posts yet"}
+            description={
+              isOwnProfile
+                ? "No posts yet. Be the first to share something!"
+                : "This user hasn't posted anything yet."
+            }
+          />
         ) : null}
 
         {posts.map((post) => (

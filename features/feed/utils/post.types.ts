@@ -41,4 +41,5 @@ export interface GetPostsParams {
 export interface UpdatePostInput {
   content?: string;
   visibility?: PostVisibility;
+  removeImage?: boolean;
 }

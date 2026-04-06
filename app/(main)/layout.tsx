@@ -11,21 +11,27 @@ import { RightSidebar } from "@/features/layout/components/right-sidebar";
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
     <AuthRouteGuard mode="protected">
-      <div className="min-h-screen bg-background pb-16 lg:pb-0">
+      <div className="min-h-screen bg-background pb-16 lg:h-screen lg:overflow-hidden lg:pb-0">
         <DesktopNavbar />
         <MobileTopBar />
 
-        <main className="mx-auto w-full max-w-330 px-4 py-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-12 lg:gap-6">
-            <div className="md:col-span-3">
+        <main
+          role="main"
+          className="mx-auto w-full max-w-330 px-4 py-4 lg:box-border lg:h-[calc(100vh-78px)] lg:overflow-hidden"
+        >
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-12 lg:h-full lg:gap-6">
+            <div className="md:col-span-3 lg:h-full lg:overflow-y-auto lg:scroll-smooth lg:[scrollbar-width:none] lg:[-ms-overflow-style:none] lg:[&::-webkit-scrollbar]:hidden">
               <LeftSidebar />
             </div>
 
-            <section className="md:col-span-9 lg:col-span-6">
+            <section
+              aria-label="Main content"
+              className="md:col-span-9 lg:col-span-6 lg:h-full lg:overflow-y-auto lg:scroll-smooth lg:[scrollbar-width:none] lg:[-ms-overflow-style:none] lg:[&::-webkit-scrollbar]:hidden"
+            >
               {children}
             </section>
 
-            <div className="md:col-span-3">
+            <div className="md:col-span-3 lg:h-full lg:overflow-y-auto lg:scroll-smooth lg:[scrollbar-width:none] lg:[-ms-overflow-style:none] lg:[&::-webkit-scrollbar]:hidden">
               <RightSidebar />
             </div>
           </div>

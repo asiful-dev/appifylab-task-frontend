@@ -10,6 +10,14 @@ import { useToggleLike } from "@/features/likes/hooks/use-toggle-like";
 import { RelativeTime } from "@/shared/ui-components/composed/relative-time";
 import { UserAvatar } from "@/shared/ui-components/composed/user-avatar";
 import { Button } from "@/shared/ui-components/controls/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/ui-components/controls/dialog";
 
 export function ReplyItem({
   reply,
@@ -25,6 +33,7 @@ export function ReplyItem({
   const isOwner = currentUserId === reply.authorId;
   const toggleLikeMutation = useToggleLike("comment");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const authorProfileHref =
     currentUserId && reply.authorId === currentUserId
       ? "/profile"
@@ -80,25 +89,53 @@ export function ReplyItem({
               variant="ghost"
               size="sm"
               disabled={isDeleting}
-              onClick={async () => {
-                if (window.confirm("Delete this reply?")) {
+              onClick={() => setIsDeleteDialogOpen(true)}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          ) : null}
+        </div>
+
+        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete reply?</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsDeleteDialogOpen(false)}
+                disabled={isDeleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                disabled={isDeleting}
+                onClick={async () => {
                   setIsDeleting(true);
 
                   try {
                     await onDelete(reply.id);
+                    setIsDeleteDialogOpen(false);
                     toast.success("Reply deleted");
                   } catch {
                     toast.error("Unable to delete reply");
                   } finally {
                     setIsDeleting(false);
                   }
-                }
-              }}
-            >
-              {isDeleting ? "Deleting..." : "Delete"}
-            </Button>
-          ) : null}
-        </div>
+                }}
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </article>
   );

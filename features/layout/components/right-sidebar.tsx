@@ -1,11 +1,17 @@
 import { TrendingTopics } from "@/features/layout/components/trending-topics";
 import { YouMightLike } from "@/features/layout/components/you-might-like";
+import { YourFriends } from "@/features/layout/components/your-friends";
 
 export function RightSidebar() {
   return (
-    <aside className="hidden space-y-4 md:block">
+    <aside
+      role="complementary"
+      aria-label="Right sidebar"
+      className="hidden space-y-4 md:block"
+    >
       <YouMightLike />
-      <TrendingTopics />
+      <YourFriends />
+      {/* <TrendingTopics /> */}
     </aside>
   );
 }

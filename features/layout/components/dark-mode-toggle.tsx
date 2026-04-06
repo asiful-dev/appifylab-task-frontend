@@ -3,21 +3,42 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { Button } from "@/shared/ui-components/controls/button";
-
 export function DarkModeToggle() {
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   return (
-    <Button
-      type="button"
-      size="icon"
-      className="fixed right-4 bottom-20 z-50 rounded-full"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label="Toggle dark mode"
-    >
-      {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
-    </Button>
+    <div className="fixed right-0 top-1/2 z-1 -translate-x-1/2">
+      <button
+        type="button"
+        onClick={() => setTheme(isDark ? "light" : "dark")}
+        aria-label="Toggle theme"
+        className={`relative flex h-8 w-16.5 items-center rounded-[40px] border rotate-90 ${
+          isDark
+            ? "border-[#1890FF]  bg-[#232E42]"
+            : "border-[#1890FF] bg-[#1890FF]"
+        }`}
+      >
+        <div
+          className={`absolute h-4.5 w-4.5 rounded-full transition-all duration-200 ease ${
+            isDark ? "left-[calc(100%-28px)] bg-[#1890FF]" : "left-2.5 bg-white"
+          }`}
+        />
+
+        <Sun
+          className={`absolute left-2 size-5 -rotate-90 transition-opacity duration-200 ${
+            isDark ? "visible opacity-100" : "invisible opacity-0"
+          }`}
+        />
+
+        <Moon
+          className={`absolute right-2 size-5 rotate-180 transition-opacity duration-200 ${
+            isDark
+              ? "invisible opacity-0"
+              : "visible opacity-100 text-white fill-white"
+          }`}
+        />
+      </button>
+    </div>
   );
 }

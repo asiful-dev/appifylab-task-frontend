@@ -26,9 +26,13 @@ export function NotificationDropdown() {
           type="button"
           variant="ghost"
           size="icon"
+          className="relative cursor-pointer rounded-md text-foreground hover:bg-transparent hover:text-primary"
           aria-label="Notifications"
         >
           <Bell className="size-5" />
+          <span className="absolute -right-0.5 -top-0.5 inline-flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold leading-none text-primary-foreground">
+            6
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-72">

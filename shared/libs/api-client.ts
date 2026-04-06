@@ -1,6 +1,5 @@
 import { API_BASE_URL, API_ROUTES } from "@/shared/libs/constants";
 import { useAuthStore } from "@/shared/libs/auth-store";
-import { getCsrfToken } from "@/shared/utils/csrf";
 
 export interface ApiSuccessResponse<T> {
   success: true;
@@ -41,7 +40,6 @@ interface RequestOptions extends Omit<RequestInit, "body" | "method"> {
   body?: unknown;
   method?: HttpMethod;
   query?: Record<string, QueryValue>;
-  csrf?: boolean;
   retryOnAuthFailure?: boolean;
 }
 
@@ -68,11 +66,7 @@ function isFormData(value: unknown): value is FormData {
   return typeof FormData !== "undefined" && value instanceof FormData;
 }
 
-function buildHeaders(
-  initHeaders?: HeadersInit,
-  method: HttpMethod = "GET",
-  csrf = false,
-) {
+function buildHeaders(initHeaders?: HeadersInit, method: HttpMethod = "GET") {
   const headers = new Headers(initHeaders);
   const accessToken = useAuthStore.getState().accessToken;
 
@@ -80,14 +74,6 @@ function buildHeaders(
 
   if (accessToken) {
     headers.set("Authorization", `Bearer ${accessToken}`);
-  }
-
-  if (csrf && ["POST", "PATCH", "PUT", "DELETE"].includes(method)) {
-    const csrfToken = getCsrfToken();
-
-    if (csrfToken) {
-      headers.set("x-csrf-token", csrfToken);
-    }
   }
 
   return headers;
@@ -113,6 +99,25 @@ async function parseBody<T>(response: Response): Promise<T> {
     }
 
     return payload as T;
+  }
+
+  if (response.status === 429) {
+    const retryAfter = response.headers.get("retry-after");
+    const message = retryAfter
+      ? `Too many requests. Please try again in ${retryAfter} seconds.`
+      : "Too many requests. Please try again later.";
+
+    if (typeof window !== "undefined") {
+      void import("sonner")
+        .then(({ toast }) => {
+          toast.error(message);
+        })
+        .catch(() => {
+          // noop
+        });
+    }
+
+    throw new ApiError("RATE_LIMITED", message, 429);
   }
 
   if (payload && typeof payload === "object" && "error" in payload) {
@@ -174,11 +179,10 @@ async function request<T>(
     body,
     method = "GET",
     query,
-    csrf = true,
     retryOnAuthFailure = true,
     ...init
   } = options;
-  const headers = buildHeaders(init.headers, method, csrf);
+  const headers = buildHeaders(init.headers, method);
   const hasBody = body !== undefined && body !== null;
 
   if (hasBody && !isFormData(body) && !headers.has("Content-Type")) {

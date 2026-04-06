@@ -3,7 +3,9 @@
 import { AvatarUpload } from "@/features/profile/components/avatar-upload";
 import { ChangePasswordForm } from "@/features/profile/components/change-password-form";
 import { EditProfileForm } from "@/features/profile/components/edit-profile-form";
+import { ProfileSkeleton } from "@/features/profile/components/profile-skeleton";
 import { useMe } from "@/features/profile/hooks/use-me";
+import { ErrorState } from "@/shared/ui-components/composed/error-state";
 import {
   Card,
   CardContent,
@@ -12,13 +14,19 @@ import {
 } from "@/shared/ui-components/controls/card";
 
 export function EditProfilePageContent() {
-  const { data: me, isLoading } = useMe();
+  const { data: me, isLoading, isError, refetch } = useMe();
 
   if (isLoading) {
+    return <ProfileSkeleton />;
+  }
+
+  if (isError) {
     return (
-      <p className="py-10 text-center text-sm text-muted-foreground">
-        Loading profile...
-      </p>
+      <ErrorState
+        title="Failed to load profile settings"
+        description="Please try again."
+        onRetry={() => void refetch()}
+      />
     );
   }
 

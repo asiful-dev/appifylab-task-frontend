@@ -4,7 +4,11 @@ import { SuggestedPeople } from "@/features/layout/components/suggested-people";
 
 export function LeftSidebar() {
   return (
-    <aside className="hidden space-y-4 lg:block">
+    <aside
+      role="complementary"
+      aria-label="Left sidebar"
+      className="hidden space-y-4 lg:block"
+    >
       <ExploreMenu />
       <SuggestedPeople />
       <EventsWidget />

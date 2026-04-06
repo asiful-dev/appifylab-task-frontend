@@ -12,10 +12,8 @@ export const authApi = {
     apiClient.post<T>(API_ROUTES.auth.login, input),
   register: <T>(input: RegisterInput) =>
     apiClient.post<T>(API_ROUTES.auth.register, input),
-  refresh: <T>() =>
-    apiClient.post<T>(API_ROUTES.auth.refresh, undefined, { csrf: false }),
-  logout: <T>() =>
-    apiClient.post<T>(API_ROUTES.auth.logout, undefined, { csrf: false }),
+  refresh: <T>() => apiClient.post<T>(API_ROUTES.auth.refresh),
+  logout: <T>() => apiClient.post<T>(API_ROUTES.auth.logout),
   forgotPassword: <T>(input: ForgotPasswordInput) =>
     apiClient.post<T>(API_ROUTES.auth.forgotPassword, input),
   resetPassword: <T>(input: ResetPasswordInput) =>

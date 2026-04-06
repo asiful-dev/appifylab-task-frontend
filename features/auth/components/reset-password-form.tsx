@@ -61,18 +61,19 @@ export function ResetPasswordForm() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-lg bg-card p-8 shadow-[var(--b-shadow1)]">
+    <div className="w-full max-w-md rounded-lg bg-card p-8 shadow-(--b-shadow1)">
       <div className="mb-6 flex justify-center">
         <Image
           src="/images/logo.svg"
           alt="BuddyScript"
           width={130}
           height={42}
+          style={{ height: "auto" }}
           priority
         />
       </div>
 
-      <h1 className="mb-2 text-center text-2xl font-medium text-[var(--color2)]">
+      <h1 className="mb-2 text-center text-2xl font-medium text-(--color2)">
         Reset Password
       </h1>
       <p className="mb-6 text-center text-sm text-muted-foreground">
@@ -80,11 +81,20 @@ export function ResetPasswordForm() {
       </p>
 
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-        <Input type="hidden" {...register("token")} />
+        <Input
+          type="hidden"
+          disabled={resetPasswordMutation.isPending}
+          {...register("token")}
+        />
 
         <div className="space-y-2">
           <Label htmlFor="resetPassword">New Password</Label>
-          <Input id="resetPassword" type="password" {...register("password")} />
+          <Input
+            id="resetPassword"
+            type="password"
+            disabled={resetPasswordMutation.isPending}
+            {...register("password")}
+          />
           {errors.password?.message ? (
             <p className="text-sm text-destructive">
               {errors.password.message}
@@ -97,6 +107,7 @@ export function ResetPasswordForm() {
           <Input
             id="resetConfirmPassword"
             type="password"
+            disabled={resetPasswordMutation.isPending}
             {...register("confirmPassword")}
           />
           {errors.confirmPassword?.message ? (

@@ -12,6 +12,7 @@ export function MobileTopBar() {
           alt="BuddyScript"
           width={110}
           height={36}
+          style={{ height: "auto" }}
         />
         <Button type="button" variant="ghost" size="icon" aria-label="Search">
           <Search className="size-5" />
